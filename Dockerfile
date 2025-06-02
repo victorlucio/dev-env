@@ -1,4 +1,8 @@
 FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y curl bash \
+    && rm -rf /var/lib/apt/lists/*
+
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
@@ -15,7 +19,7 @@ RUN apt-get install -y python3 python3-pip
 RUN apt-get install -y openjdk-17-jdk
 
 ENV NVM_DIR=/home/devuser/.nvm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh -L -s | bash -c
 
 RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/devuser/.bashrc && \
     echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/devuser/.bashrc
