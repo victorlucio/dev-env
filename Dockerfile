@@ -1,6 +1,9 @@
 FROM ubuntu:22.04
-RUN apt-get update && apt-get install -y curl bash \
-    && rm -rf /var/lib/apt/lists/*
+
+# Instalar dependências
+RUN apt-get update && \
+    apt-get install -y curl bash ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
     
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -17,11 +20,15 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get install -y python3 python3-pip
 RUN apt-get install -y openjdk-17-jdk
 
-ENV NVM_DIR=/home/devuser/.nvm
-RUN bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
+# Baixar o script do nvm e instalar
+RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh -o /tmp/install-nvm.sh && \
+    bash /tmp/install-nvm.sh && \
+    rm /tmp/install-nvm.sh
 
-RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/devuser/.bashrc && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/devuser/.bashrc
+# Variáveis de ambiente do nvm
+ENV NVM_DIR=/root/.nvm
+RUN echo "export NVM_DIR=\"$NVM_DIR\"" >> /root/.bashrc && \
+    echo "[ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"" >> /root/.bashrc
 
 RUN useradd -m devuser && echo "devuser:devpass" | chpasswd && adduser devuser sudo
 RUN mkdir -p /home/devuser/.nvm && chown -R devuser:devuser /home/devuser/.nvm
