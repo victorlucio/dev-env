@@ -1,0 +1,1 @@
+# Crie um novo projeto Angular com: ng new angular-hello
