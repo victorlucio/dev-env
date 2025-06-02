@@ -11,3 +11,8 @@ services:
     volumes:
       - ./projetos:/home/devuser/projetos
     tty: true
+    stdin_open: true
+    deploy:
+      resources:
+        limits:
+          memory: 2g
